@@ -46,7 +46,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
-        verticalArrangement = Alignment.CenterVertically,
+        verticalArrangement = Arrangement.Center, // Исправлено здесь
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -89,7 +89,7 @@ fun MainAppScreen(onLogout: () -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
-        verticalArrangement = Alignment.CenterVertically,
+        verticalArrangement = Arrangement.Center, // Исправлено здесь
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
