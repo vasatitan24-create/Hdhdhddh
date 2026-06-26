@@ -48,10 +48,12 @@ object NetworkClient {
     private val cookieJar = object : CookieJar {
         private val cookieStore = HashMap<String, List<Cookie>>()
         override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-            cookieStore[url.host] = cookies
+            // Исправлено: вызываем функцию host() вместо свойства host
+            cookieStore[url.host()] = cookies
         }
         override fun loadForRequest(url: HttpUrl): List<Cookie> {
-            return cookieStore[url.host] ?: ArrayList()
+            // Исправлено: вызываем функцию host() вместо свойства host
+            return cookieStore[url.host()] ?: ArrayList()
         }
     }
 
@@ -183,6 +185,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
 }
 
 // === ЭКРАН НАЗВАНИЙ ЧАТОВ (НАТИВНЫЙ СПИСОК) ===
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainAppScreen(onLogout: () -> Unit) {
     var chats by remember { mutableStateOf<List<ChatItem>>(emptyList()) }
@@ -190,7 +193,6 @@ fun MainAppScreen(onLogout: () -> Unit) {
     var errorMessage by remember { mutableStateOf("") }
     val context = LocalContext.current
 
-    // Автоматический запрос списка чатов после успешного входа
     LaunchedEffect(Unit) {
         NetworkClient.apiService.getChats().enqueue(object : Callback<List<ChatItem>> {
             override fun onResponse(call: Call<List<ChatItem>>, response: Response<List<ChatItem>>) {
@@ -209,7 +211,6 @@ fun MainAppScreen(onLogout: () -> Unit) {
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        // Простая верхняя панель приложения
         SmallTopAppBar(
             title = { Text("Чаты (Нативный Android)") },
             actions = {
@@ -243,7 +244,6 @@ fun MainAppScreen(onLogout: () -> Unit) {
                             .padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Символическая аватарка в нативном стиле
                         Box(
                             modifier = Modifier.size(40.dp),
                             contentAlignment = Alignment.Center
